@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const Welcome = () => {
     const [user, setUser] = useState({});
     const navigate = useNavigate();
+    const loggedInUser = useSelector(state => state.Auth.loggedInUser)
     useEffect(() => {
-       const user = localStorage.getItem('loggedInUser');
-       if(user){
-           const parsedUser = JSON.parse(user)
-           setUser(parsedUser)
+        console.log("LoggedIn User", loggedInUser)
+       if(loggedInUser){
+           setUser(loggedInUser)
        }else {
             navigate('/login');
        }

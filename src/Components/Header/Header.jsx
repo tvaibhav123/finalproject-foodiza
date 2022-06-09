@@ -6,10 +6,11 @@ const Header = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     useEffect(() => {
+       console.log("Navigate change called...")
        const user = localStorage.getItem('loggedInUser');
        if(user){
            const parsedUser = JSON.parse(user)
-           setUser(parsedUser)
+           setUser(parsedUser);
        }
     }, [navigate]);
     const logout = () => {
@@ -21,7 +22,7 @@ const Header = () => {
       <div>
          <Navbar color="dark" dark expand="md">
             <NavbarBrand href="/">FOODIZA</NavbarBrand>
-            {/* <Collapse isOpen={this.state.isOpen} navbar> */}
+            
                <Nav className="ml-auto" navbar>
                   <NavItem className="pt-2">
                      <Link className="link" to="/">Home</Link>
@@ -32,11 +33,7 @@ const Header = () => {
                      </Link>
                   </NavItem> }
                   
-                  {/* <NavItem className="ps-3">
-                     <Link className="link" to="/register">
-                        Sign Up
-                     </Link>
-                  </NavItem> */}
+               
                   {user && <UncontrolledDropdown nav inNavbar>
                      <DropdownToggle nav caret className="link">
                         {user.name}
@@ -46,7 +43,7 @@ const Header = () => {
                      </DropdownMenu>
                   </UncontrolledDropdown>}
                </Nav>
-            {/* </Collapse> */}
+            
          </Navbar>
       </div>
    );

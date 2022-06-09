@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
    Alert,
@@ -9,9 +10,11 @@ import {
    Input,
    Label,
 } from "reactstrap";
+import { authActions } from "../../Store";
 
 const Login = () => {
    const navigate = useNavigate();
+   const dispatch = useDispatch();
    const [email, setEmail] = useState("");
    const [pass, setPass] = useState("");
    const [error, setError] = useState("");
@@ -35,16 +38,43 @@ const Login = () => {
          const users  = localStorage.getItem("users");
          if(users && users.length>0){
             const parsedusers = JSON.parse(users);
-            const foundUser = parsedusers.filter(user => {
+            /* const foundUser = parsedusers.filter(user => {
                return user.email === userToLogin.email && user.password === userToLogin.password
+            }) */
+
+            fetch('/login',{
+               method:"POST",
+               body: JSON.stringify({email:email, password: pass}),
+               headers: {
+                  "Content-type": "application/json; charset=UTF-8"
+               }
+            }).then(async res => {
+               console.log(res)
+               if(res.ok){
+                  return res.json()
+               }else {
+                  const errorResponse = await res.json()
+                  throw new Error(errorResponse.message)
+               }
             })
+            .then(response => {
+               setError("");
+               console.log("Response", response)
+               dispatch(authActions.loginUser({name: response.user[0].name, email: response.user[0].email, phNumber: response.user[0].phoneNumber }))
+               navigate("/welcome")
+            })
+            .catch(err => {
+               console.log("error", err)
+               setError(err.toString())
+            })
+            /* const foundUser = [];
             if(foundUser.length>0){
                setError("");
                localStorage.setItem('loggedInUser',JSON.stringify(foundUser[0]));
                navigate("/welcome")
             }else {
                setError("Incorrect username or password.")
-            }
+            } */
          }
       }
    };

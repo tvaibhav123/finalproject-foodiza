@@ -47,6 +47,20 @@ const submitHandler = (event) => {
         }
         const users = localStorage.getItem('users')
         console.log("users", users)
+
+        fetch('/register', {
+            method : "POST",
+            body: JSON.stringify({"user" : user}),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then((res) => {
+            return res.json()
+        })
+        .then((res)=>{
+            console.log("response", res)
+        })
+
         if(users){
             const parsedusers = JSON.parse(users);
             console.log(users)
