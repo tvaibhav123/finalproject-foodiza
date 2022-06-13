@@ -5,6 +5,11 @@ const AuthInitialState = {
     loggedInUser : [],
 }
 
+const CartInitialState = {
+    items:[],
+    cartTotal: 0
+}
+
 const AuthSlice = createSlice({
     name: "Auth",
     initialState: AuthInitialState,
@@ -12,7 +17,7 @@ const AuthSlice = createSlice({
         loginUser : (state, action) => {
             console.log("Action Payload", action.payload)
             state.loggedInUser = action.payload;
-            
+            state.isLoggedIn = true;
         },
         logout : (state) => {
             state.loggedInUser = {};
@@ -21,9 +26,30 @@ const AuthSlice = createSlice({
 
     }
 })
+const CartSlice = createSlice({
+    name: "Cart",
+    initialState: CartInitialState,
+    reducers : {
+        addItemToCart : (state, action) => {
+            state.items = [...state.items, action.payload]
+            state.cartTotal = state.cartTotal + action.payload.cost
+        },
+        increaseQuantityOfItem : (state, action) => {
+            
+        },
+        reduceItemFromCart : (state) => {
+        }
 
+    }
+})
+
+export const cartActions = CartSlice.actions;
 export const authActions = AuthSlice.actions;
+
 const store = configureStore({
-    reducer:{Auth: AuthSlice.reducer}
+    reducer:{
+        Auth: AuthSlice.reducer,
+        Cart: CartSlice.reducer
+    }
 })
 export default store;

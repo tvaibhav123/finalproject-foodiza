@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useNavigationType } from "react-router-dom";
 import { DropdownItem, DropdownMenu, DropdownToggle, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, UncontrolledDropdown } from "reactstrap";
+import { authActions } from "../../Store";
 
 const Header = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const reduxStateUser = useSelector(state => state.Auth.loggedInUser);
+    const dispatch = useDispatch();
     useEffect(() => {
        console.log("Navigate change called...")
-       const user = localStorage.getItem('loggedInUser');
-       if(user){
-           const parsedUser = JSON.parse(user)
-           setUser(parsedUser);
+       //const user = localStorage.getItem('loggedInUser');
+       console.log("user ", user)
+       if(reduxStateUser){
+           setUser(reduxStateUser);
        }
     }, [navigate]);
     const logout = () => {
-        localStorage.removeItem("loggedInUser");
+        dispatch(authActions.logout())
         setUser(null);
         navigate("/login")
     }
