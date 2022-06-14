@@ -43,6 +43,14 @@ const Menu = () => {
         const itemInCart = cartItems.filter(cartitem => cartitem.id === item.id)
         return itemInCart[0].quantity;
    }
+
+   const incrementHandler = (item) => {
+      dispatch(cartActions.increaseQuantityOfItem(item));
+   }
+
+   const decrementHanlder = (item) => {
+      dispatch(cartActions.decreaseQuantityOfItem(item));
+   }
    return (
       <div className="d-flex">
          {menu &&
@@ -66,13 +74,13 @@ const Menu = () => {
                         <CardBody>
                             { hasItemInCart(item) ?
                                 <ButtonGroup>
-                                        <Button color="primary">-</Button>
-                                        <Button>
+                                        <Button color="primary" onClick={e => decrementHanlder(item)}>-</Button>
+                                        <Button className="button-background">
                                             <div>
                                                 {getQuantityInfo(item)}
                                             </div>
                                         </Button>
-                                        <Button color="primary">+</Button>
+                                        <Button color="primary" onClick={e => incrementHandler(item)}>+</Button>
                                 </ButtonGroup> 
                                 : 
                                 <Button color="primary" onClick={e => addItemToCarthandler(item)}>Add</Button>

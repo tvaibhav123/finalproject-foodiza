@@ -29,16 +29,19 @@ const Header = () => {
             
                <Nav className="ml-auto" navbar>
                   <NavItem className="pt-2">
-                     <Link className="link" to="/">Home</Link>
+                     <Link className="link" to="/welcome">Home</Link>
                   </NavItem>
-                  {!user && <NavItem className="ps-3 pt-2">
+                  <NavItem className="ps-3 pt-2">
+                     <Link className="link" to="/cart">Cart</Link>
+                  </NavItem>
+                  {Object.keys(reduxStateUser).length == 0 && <NavItem className="ps-3 pt-2">
                      <Link className="link" to="/login">
                         Sign In 
                      </Link>
                   </NavItem> }
                   
                
-                  {user && <UncontrolledDropdown nav inNavbar>
+                  { Object.keys(reduxStateUser).length>0 && <UncontrolledDropdown nav inNavbar>
                      <DropdownToggle nav caret className="link">
                         {user.name}
                      </DropdownToggle>

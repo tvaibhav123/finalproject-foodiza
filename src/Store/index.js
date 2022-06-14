@@ -1,8 +1,8 @@
-const { createSlice, configureStore } = require("@reduxjs/toolkit")
+const { createSlice, configureStore, current } = require("@reduxjs/toolkit")
 
 const AuthInitialState = {
     isLoggedIn: false, 
-    loggedInUser : [],
+    loggedInUser : {},
 }
 
 const CartInitialState = {
@@ -35,7 +35,28 @@ const CartSlice = createSlice({
             state.cartTotal = state.cartTotal + action.payload.cost
         },
         increaseQuantityOfItem : (state, action) => {
-            
+            state.items = state.items.map(item => {
+                if(item.id === action.payload.id){
+                    item.quantity++;
+                    state.cartTotal = state.cartTotal + action.payload.cost
+                }
+                return item;
+            })
+
+        },
+        decreaseQuantityOfItem : (state, action) => {
+            const tempArr = state.items.map(item => {
+                if(item.id === action.payload.id){
+                    item.quantity--;
+                    if(item.quantity <= 0) {
+                        item = null
+                    }
+                    state.cartTotal = state.cartTotal - action.payload.cost
+                }
+                return item;
+            })
+            const finalArr = tempArr.filter(item => item!==null)
+            state.items = finalArr;
         },
         reduceItemFromCart : (state) => {
         }
