@@ -58,7 +58,9 @@ const CartSlice = createSlice({
             const finalArr = tempArr.filter(item => item!==null)
             state.items = finalArr;
         },
-        reduceItemFromCart : (state) => {
+        clearCart : (state) => {
+            state.items = []
+            state.cartTotal = 0
         }
 
     }

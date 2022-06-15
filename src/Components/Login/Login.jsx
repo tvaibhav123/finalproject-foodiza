@@ -31,42 +31,49 @@ const Login = () => {
    const submitHandler = (event) => {
       event.preventDefault();
       const userToLogin = {
-         email: email, 
-         password: pass
-      }
+         email: email,
+         password: pass,
+      };
       if (isFormvalid()) {
-         const users  = localStorage.getItem("users");
-         if(users && users.length>0){
+         const users = localStorage.getItem("users");
+         if (users && users.length > 0) {
             const parsedusers = JSON.parse(users);
             /* const foundUser = parsedusers.filter(user => {
                return user.email === userToLogin.email && user.password === userToLogin.password
             }) */
 
-            fetch('/login',{
-               method:"POST",
-               body: JSON.stringify({email:email, password: pass}),
+            fetch("/login", {
+               method: "POST",
+               body: JSON.stringify({ email: email, password: pass }),
                headers: {
-                  "Content-type": "application/json; charset=UTF-8"
-               }
-            }).then(async res => {
-               console.log(res)
-               if(res.ok){
-                  return res.json()
-               }else {
-                  const errorResponse = await res.json()
-                  throw new Error(errorResponse.message)
-               }
+                  "Content-type": "application/json; charset=UTF-8",
+               },
             })
-            .then(response => {
-               setError("");
-               console.log("Response", response)
-               dispatch(authActions.loginUser({name: response.user[0].name, email: response.user[0].email, phNumber: response.user[0].phoneNumber }))
-               navigate("/welcome")
-            })
-            .catch(err => {
-               console.log("error", err)
-               setError(err.toString())
-            })
+               .then(async (res) => {
+                  console.log(res);
+                  if (res.ok) {
+                     return res.json();
+                  } else {
+                     const errorResponse = await res.json();
+                     throw new Error(errorResponse.message);
+                  }
+               })
+               .then((response) => {
+                  setError("");
+                  console.log("Response", response);
+                  dispatch(
+                     authActions.loginUser({
+                        name: response.user[0].name,
+                        email: response.user[0].email,
+                        phNumber: response.user[0].phoneNumber,
+                     })
+                  );
+                  navigate("/welcome");
+               })
+               .catch((err) => {
+                  console.log("error", err);
+                  setError(err.toString());
+               });
             /* const foundUser = [];
             if(foundUser.length>0){
                setError("");
@@ -133,17 +140,21 @@ const Login = () => {
                   />
                   <FormFeedback>Invalid Password</FormFeedback>
                </FormGroup>
-               <div>Do not have account? <Link to="/register">Create One</Link></div>
+               <div>
+                  Do not have account? <Link to="/register">Create One</Link>
+               </div>
                <Button type="submit" color="primary" className="mt-3">
                   Login
                </Button>
             </Form>
          </div>
-         {error !== "" && 
+         {error !== "" && (
             <div className="d-flex justify-content-center mt-3">
-               <Alert color="danger" className="w-50">{error}</Alert>
+               <Alert color="danger" className="w-50">
+                  {error}
+               </Alert>
             </div>
-         }        
+         )}
       </div>
    );
 };

@@ -10,6 +10,7 @@ import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
 import Welcome from "./Components/Welcome/Welcome";
 import Cart from "./Components/Cart/Cart";
+import OrderHistory from "./Components/Orders/OrderHistory";
 
 
 
@@ -25,6 +26,7 @@ function App() {
                <Route path="/register" element={<Register/>}/>
                <Route path="/welcome" element={isUserLoggedIn ? <Welcome/> : <Navigate to="/login"/>}/>
                <Route path="/cart" element={isUserLoggedIn ? <Cart/> : <Navigate to="/login"/>}/>
+               <Route path="/orders" element={isUserLoggedIn ? <OrderHistory/> : <Navigate to="/login"/>}/>
                <Route path="*" element={<NotFound/>}></Route>
             </Routes>
          </BrowserRouter>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useNavigationType } from "react-router-dom";
 import { DropdownItem, DropdownMenu, DropdownToggle, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, UncontrolledDropdown } from "reactstrap";
-import { authActions } from "../../Store";
+import { authActions, cartActions } from "../../Store";
 
 const Header = () => {
     const navigate = useNavigate();
@@ -18,6 +18,7 @@ const Header = () => {
        }
     }, [navigate]);
     const logout = () => {
+        dispatch(cartActions.clearCart())
         dispatch(authActions.logout())
         setUser(null);
         navigate("/login")
@@ -31,10 +32,13 @@ const Header = () => {
                   <NavItem className="pt-2">
                      <Link className="link" to="/welcome">Home</Link>
                   </NavItem>
+                  <NavItem className="pt-2 ps-3">
+                     <Link className="link" to="/orders">Order History</Link>
+                  </NavItem>
                   <NavItem className="ps-3 pt-2">
                      <Link className="link" to="/cart">Cart</Link>
                   </NavItem>
-                  {Object.keys(reduxStateUser).length == 0 && <NavItem className="ps-3 pt-2">
+                  {Object.keys(reduxStateUser).length == 0 && <NavItem className="ps-3 pt-3">
                      <Link className="link" to="/login">
                         Sign In 
                      </Link>
