@@ -63,9 +63,9 @@ const Login = () => {
                   console.log("Response", response);
                   dispatch(
                      authActions.loginUser({
-                        name: response.user[0].name,
-                        email: response.user[0].email,
-                        phNumber: response.user[0].phoneNumber,
+                        name: response.user.name,
+                        email: response.user.email,
+                        phNumber: response.user.phoneNumber,
                      })
                   );
                   navigate("/welcome");

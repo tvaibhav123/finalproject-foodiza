@@ -8,6 +8,7 @@ const [pass, setPass] = useState("");
 const [ph, setPh] = useState(0);
 const [formError, setFormError] = useState("");
 const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+const [error, setError] = useState("");
 
 const [nameHasError, setNameHasError] = useState(false);
 const [emailHasError, setEmailHasError] = useState(false);
@@ -39,12 +40,12 @@ const submitHandler = (event) => {
             phoneNumber: ph 
 
         }
-        if(isDuplicateUser(user)){
+        /* if(isDuplicateUser(user)){
             setFormError("User with this email already exists");
             return;
         }else {
             setFormError("")
-        }
+        } */
         const users = localStorage.getItem('users')
         console.log("users", users)
 
@@ -54,24 +55,25 @@ const submitHandler = (event) => {
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }
-        }).then((res) => {
-            return res.json()
+        }).then(async (res) => {
+                return res.json()
         })
-        .then((res)=>{
-            console.log("response", res)
+        .then(async (res)=>{
+            if(!res.ok){
+                console.log("Res ok ",res)
+                throw new Error(res.message)
+            }else {
+                console.log("response", res)
+                setShowSuccessMessage(true)
+            }
+        }).catch(err => {
+            console.log("Error ", err)
+            setError(`${err}`)
         })
 
-        if(users){
-            const parsedusers = JSON.parse(users);
-            console.log(users)
-            localStorage.setItem('users', JSON.stringify([...parsedusers,user]))
-            
-        }else {
-            localStorage.setItem('users',JSON.stringify([user]));
-        }
-        setShowSuccessMessage(true)
         setTimeout(()=>{
             setShowSuccessMessage(false)
+            /* setError(false) */
         },2000)
         clearForm();
     }
@@ -196,6 +198,12 @@ const clearForm = () => {
              <Alert className="w-50" color="success">
                                     User has been added successfully
                                 </Alert>   
+             </div>}
+         {error &&  <div  className="d-flex justify-content-center mt-3">
+             
+             <Alert className="w-50" color="danger">
+                {error}
+            </Alert>   
              </div>}
       </div>
    );
